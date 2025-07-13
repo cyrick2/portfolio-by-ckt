@@ -1,9 +1,10 @@
-import ModelClient, { isUnexpected } from "@azure-rest/ai-inference";
-import { AzureKeyCredential } from "@azure/core-auth";
+// netlify/functions/deepseek-chat.js
 
-const token = process.env.GITHUB_TOKEN;
+import OpenAI from "openai";
+
+const token = process.env["GITHUB_TOKEN"];
 const endpoint = "https://models.github.ai/inference";
-const model = "deepseek/DeepSeek-R1-0528";
+const model = "openai/gpt-4.1";
 
 // Full structured profile — keep this complete in your file
 const CYRICK_PROFILE = `
@@ -64,7 +65,6 @@ export async function handler(event, context) {
   try {
     const { userMessage } = JSON.parse(event.body);
 
-    // If your frontend sends a special signal, return typing status
     if (userMessage === "__typing_check__") {
       return {
         statusCode: 200,
@@ -75,14 +75,17 @@ export async function handler(event, context) {
       };
     }
 
-    const client = ModelClient(endpoint, new AzureKeyCredential(token));
+    const client = new OpenAI({
+      apiKey: token,
+      baseURL: endpoint,
+    });
 
-    const response = await client.path("/chat/completions").post({
-      body: {
-        messages: [
-          {
-            role: "system",
-            content: `You are Cyrick AI, a friendly AI chatbot on a student portfolio website.
+    const response = await client.chat.completions.create({
+      model: model,
+      messages: [
+        {
+          role: "system",
+          content: `You are Cyrick AI, a friendly AI chatbot on a student portfolio website.
 You must only answer questions related to Cyrick Kyle B. Tapay and his portfolio using the provided data.
 If a user asks something unrelated, politely respond that you can only answer portfolio-related questions.
 Do not include "<think>" or internal reasoning in your response; only provide clean, direct answers.
@@ -90,37 +93,22 @@ Do not include "<think>" or internal reasoning in your response; only provide cl
 Here is the data:
 ${CYRICK_PROFILE}
 `,
-          },
-          { role: "user", content: userMessage },
-        ],
-        max_tokens: 300,
-        model: model,
-      },
+        },
+        { role: "user", content: userMessage },
+      ],
+      temperature: 0.7,
+      top_p: 1,
+      max_tokens: 300,
     });
 
-    if (isUnexpected(response)) {
-      console.error(response.body.error);
-      return {
-        statusCode: 500,
-        body: JSON.stringify({
-          message: "Error from Azure API",
-          details: response.body.error,
-        }),
-      };
-    }
-
-    let rawReply = response.body.choices[0].message.content.trim();
-
-    // Remove any stray <think> or XML-like tags the model might add
-    rawReply = rawReply.replace(/<think>[\s\S]*?<\/think>/gi, "").trim();
-    rawReply = rawReply.replace(/^<.*?>/, "").trim();
+    const rawReply = response.choices[0].message.content.trim();
 
     return {
       statusCode: 200,
       body: JSON.stringify({ botReply: rawReply, isTyping: false }),
     };
   } catch (error) {
-    console.error(error);
+    console.error("Cyrick AI Error:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({
