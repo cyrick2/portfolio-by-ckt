@@ -136,7 +136,7 @@ async function sendMessage() {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 
   try {
-    const response = await fetch("/.netlify/functions/deepseek-chat", {
+    const response = await fetch("/.netlify/functions/cyrick-ai", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userMessage: userInput }),
