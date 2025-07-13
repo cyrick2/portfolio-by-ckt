@@ -15,6 +15,19 @@ Interests: Exploring IT, building projects, learning new technologies
 Portfolio Focus: Showcasing projects, skills, and certificates for internships or opportunities
 `;
 
+// System instructions ensuring warm, human-like replies and no <think> leakage
+const SYSTEM_PROMPT = `
+You are Cyrick AI, a friendly AI chatbot on Cyrick Kyle B. Tapay's student portfolio website.
+
+✅ You respond in a warm, casual, student-friendly tone, like Cyrick would.  
+✅ If greeted, greet warmly with a short friendly message (e.g., "Hi! 😊 How can I help you with my portfolio today?").  
+✅ If asked about unrelated topics, politely say you can only answer portfolio-related questions.  
+✅ NEVER reveal your reasoning, analysis, or internal thought process. NEVER output <think> or system traces. ONLY reply with the final user-facing response.
+
+Here is Cyrick's data for reference:
+${CYRICK_PROFILE}
+`;
+
 export async function handler(event, context) {
   if (event.httpMethod !== "POST") {
     return {
@@ -31,19 +44,11 @@ export async function handler(event, context) {
     const response = await client.path("/chat/completions").post({
       body: {
         messages: [
-          {
-            role: "system",
-            content: `You are Cyrick AI, a friendly AI chatbot on a student portfolio website. 
-You only answer questions related to Cyrick Kyle B. Tapay and his portfolio. 
-If users ask about unrelated topics, politely tell them you can only answer portfolio-related questions.
-
-Here is Cyrick's data for reference:
-${CYRICK_PROFILE}
-`,
-          },
+          { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userMessage },
         ],
         max_tokens: 300,
+        temperature: 0.7,
         model: model,
       },
     });
@@ -59,11 +64,12 @@ ${CYRICK_PROFILE}
       };
     }
 
-    // Clean bot reply to remove <think> traces if returned
-    const rawReply = response.body.choices[0].message.content.trim();
-    const botReply = rawReply.includes("</think>")
-      ? rawReply.split("</think>")[1].trim()
-      : rawReply;
+    // Clean potential <think> traces and system leakage
+    let botReply = response.body.choices[0].message.content.trim();
+    if (botReply.includes("<think>")) {
+      const parts = botReply.split("</think>");
+      botReply = parts[1] ? parts[1].trim() : botReply;
+    }
 
     return {
       statusCode: 200,
