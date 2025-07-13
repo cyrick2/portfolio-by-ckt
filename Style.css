@@ -910,21 +910,19 @@ span {
     margin: 2.5rem auto;
   }
 }
-
 #chatbot-container {
   width: 300px;
   height: 400px;
-  background: #f7f9fc;
+  background: #0e0e0e;
   border: 2px solid #065084;
   border-radius: 10px;
   position: fixed;
-  bottom: 70px;
+  bottom: 80px;
   right: 20px;
   display: none;
   flex-direction: column;
-  justify-content: space-between;
   overflow: hidden;
-  font-family: sans-serif;
+  font-family: "Poppins", sans-serif;
   z-index: 9999;
 }
 
@@ -932,39 +930,49 @@ span {
   flex: 1;
   padding: 10px;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .user-message,
 .bot-message {
-  margin: 5px;
-  padding: 8px 12px;
-  border-radius: 15px;
   max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 18px;
   word-wrap: break-word;
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 
 .user-message {
   background: #065084;
   color: white;
   align-self: flex-end;
+  border-bottom-right-radius: 0;
 }
 
 .bot-message {
-  background: #e0e0e0;
-  color: #000;
+  background: #1a1a1a;
+  color: #e0e0e0;
   align-self: flex-start;
+  border-bottom-left-radius: 0;
 }
 
 #chat-input-container {
   display: flex;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #333;
+  background: #0e0e0e;
 }
 
 #chat-input {
   flex: 1;
   padding: 10px;
+  background: #0e0e0e;
+  color: white;
   border: none;
   outline: none;
+  font-size: 0.9rem;
 }
 
 #send-btn {
@@ -973,14 +981,15 @@ span {
   border: none;
   padding: 0 15px;
   cursor: pointer;
+  font-size: 0.9rem;
 }
 
 #chat-toggle-btn {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   background: #065084;
   color: white;

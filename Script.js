@@ -1,3 +1,4 @@
+// ===== Typing Animation =====
 const words = ["Web Developer", "UI / UX Designer"];
 let wordIndex = 0;
 let letterIndex = 0;
@@ -27,13 +28,11 @@ function erase() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  setTimeout(type, typingSpeed);
-});
-
+// ===== Flip Card Animation =====
 document.addEventListener("DOMContentLoaded", () => {
-  const flipCard = document.querySelector(".about-picture-flip");
+  setTimeout(type, typingSpeed);
 
+  const flipCard = document.querySelector(".about-picture-flip");
   if (flipCard) {
     setInterval(() => {
       flipCard.classList.toggle("flip");
@@ -41,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// ===== Scroll Highlight & Navbar Toggle =====
 let menuIcon = document.querySelector("#menu-icon");
 let navBar = document.querySelector(".nav-list");
 let sections = document.querySelectorAll("section");
@@ -69,6 +69,7 @@ menuIcon.onclick = () => {
   navBar.classList.toggle("active");
 };
 
+// ===== Chatbot =====
 const chatWindow = document.getElementById("chat-window");
 const chatInput = document.getElementById("chat-input");
 const sendBtn = document.getElementById("send-btn");
@@ -88,24 +89,51 @@ toggleBtn.addEventListener("click", () => {
   }
 });
 
+// Send message with button or Enter
 sendBtn.addEventListener("click", sendMessage);
 chatInput.addEventListener("keypress", function (e) {
   if (e.key === "Enter") sendMessage();
 });
 
+// Markdown parser (basic: bold, italic, line breaks)
+function parseMarkdown(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/_(.*?)_/g, "<em>$1</em>")
+    .replace(/\n/g, "<br>");
+}
+
+// Append message utility with fade animation
 function appendMessage(message, className) {
   const msg = document.createElement("div");
   msg.className = className;
-  msg.textContent = message;
+  msg.style.opacity = 0;
+  msg.innerHTML = parseMarkdown(message);
   chatWindow.appendChild(msg);
+
+  setTimeout(() => {
+    msg.style.transition = "opacity 0.4s ease";
+    msg.style.opacity = 1;
+  }, 50);
+
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
+// Send message to Netlify function
 async function sendMessage() {
   const userInput = chatInput.value.trim();
   if (!userInput) return;
+
   appendMessage(userInput, "user-message");
   chatInput.value = "";
+
+  // Typing indicator
+  const typingIndicator = document.createElement("div");
+  typingIndicator.className = "bot-message";
+  typingIndicator.textContent = "Cyrick is typing...";
+  typingIndicator.id = "typing-indicator";
+  chatWindow.appendChild(typingIndicator);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 
   try {
     const response = await fetch("/.netlify/functions/deepseek-chat", {
@@ -115,6 +143,8 @@ async function sendMessage() {
     });
 
     const data = await response.json();
+    document.getElementById("typing-indicator").remove();
+
     if (response.ok && data.botReply) {
       appendMessage(data.botReply, "bot-message");
     } else {
@@ -122,10 +152,19 @@ async function sendMessage() {
       appendMessage("Sorry, Cyrick AI encountered an error.", "bot-message");
     }
   } catch (error) {
+    document.getElementById("typing-indicator").remove();
     appendMessage(
       "Sorry, Cyrick AI is offline. Try again later.",
       "bot-message"
     );
     console.error(error);
+  }
+
+  // Auto-minimize on mobile
+  if (window.innerWidth <= 650) {
+    setTimeout(() => {
+      chatbotContainer.style.display = "none";
+      toggleBtn.textContent = "💬";
+    }, 500);
   }
 }
