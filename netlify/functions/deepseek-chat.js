@@ -5,6 +5,16 @@ const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
 const model = "deepseek/DeepSeek-R1-0528";
 
+// Preload structured personal data Cyrick AI can reference
+const CYRICK_PROFILE = `
+Name: Cyrick Kyle B. Tapay
+Location: Philippines
+Field: BSIT (Bachelor of Science in Information Technology) Student
+Skills: Web development, programming (HTML, CSS, JavaScript, C#), troubleshooting, UI/UX design
+Interests: Exploring IT, building projects, learning new technologies
+Portfolio Focus: Showcasing projects, skills, and certificates for internships or opportunities
+`;
+
 export async function handler(event, context) {
   if (event.httpMethod !== "POST") {
     return {
@@ -23,12 +33,17 @@ export async function handler(event, context) {
         messages: [
           {
             role: "system",
-            content:
-              "You are Cyrick AI, a friendly AI chatbot on a student portfolio.",
+            content: `You are Cyrick AI, a friendly AI chatbot on a student portfolio website. 
+You only answer questions related to Cyrick Kyle B. Tapay and his portfolio. 
+If users ask about unrelated topics, politely tell them you can only answer portfolio-related questions.
+
+Here is Cyrick's data for reference:
+${CYRICK_PROFILE}
+`,
           },
           { role: "user", content: userMessage },
         ],
-        max_tokens: 150,
+        max_tokens: 300,
         model: model,
       },
     });
@@ -44,7 +59,12 @@ export async function handler(event, context) {
       };
     }
 
-    const botReply = response.body.choices[0].message.content.trim();
+    // Clean bot reply to remove <think> traces if returned
+    const rawReply = response.body.choices[0].message.content.trim();
+    const botReply = rawReply.includes("</think>")
+      ? rawReply.split("</think>")[1].trim()
+      : rawReply;
+
     return {
       statusCode: 200,
       body: JSON.stringify({ botReply }),
