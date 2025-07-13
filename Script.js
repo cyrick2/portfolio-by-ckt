@@ -115,7 +115,12 @@ async function sendMessage() {
     });
 
     const data = await response.json();
-    appendMessage(data.botReply, "bot-message");
+    if (response.ok && data.botReply) {
+      appendMessage(data.botReply, "bot-message");
+    } else {
+      console.error(data);
+      appendMessage("Sorry, Cyrick AI encountered an error.", "bot-message");
+    }
   } catch (error) {
     appendMessage(
       "Sorry, Cyrick AI is offline. Try again later.",
