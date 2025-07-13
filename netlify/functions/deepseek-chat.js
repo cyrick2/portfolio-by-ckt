@@ -1,3 +1,10 @@
+import ModelClient, { isUnexpected } from "@azure-rest/ai-inference";
+import { AzureKeyCredential } from "@azure/core-auth";
+
+const token = process.env.GITHUB_TOKEN;
+const endpoint = "https://models.github.ai/inference";
+const model = "deepseek/DeepSeek-R1-0528";
+
 export default async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
@@ -6,43 +13,38 @@ export default async (req, res) => {
   try {
     const { userMessage } = req.body;
 
-    const response = await fetch(
-      "https://api.deepseek.com/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "deepseek-chat", // adjust if your model name differs
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are Cyrick AI, a friendly AI chatbot on a student portfolio.",
-            },
-            { role: "user", content: userMessage },
-          ],
-          max_tokens: 150,
-          temperature: 0.7,
-        }),
-      }
-    );
+    const client = ModelClient(endpoint, new AzureKeyCredential(token));
 
-    const data = await response.json();
+    const response = await client.path("/chat/completions").post({
+      body: {
+        model: model,
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are Cyrick AI, a friendly chatbot on a student portfolio.",
+          },
+          { role: "user", content: userMessage },
+        ],
+        max_tokens: 150,
+      },
+    });
 
-    if (!response.ok) {
-      console.error(data);
-      return res
-        .status(500)
-        .json({ message: "Error from DeepSeek API", details: data });
+    if (isUnexpected(response)) {
+      console.error(response.body.error);
+      return res.status(500).json({
+        message: "Error from Azure API",
+        details: response.body.error,
+      });
     }
 
-    const botReply = data.choices[0].message.content.trim();
+    const botReply = response.body.choices[0].message.content.trim();
     res.status(200).json({ botReply });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "An error occurred with Cyrick AI." });
+    res.status(500).json({
+      message: "An error occurred with Cyrick AI.",
+      details: error.message,
+    });
   }
 };
