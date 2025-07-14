@@ -75,6 +75,7 @@ const chatInput = document.getElementById("chat-input");
 const sendBtn = document.getElementById("send-btn");
 const toggleBtn = document.getElementById("chat-toggle-btn");
 const chatbotContainer = document.getElementById("chatbot-container");
+const toggleIcon = toggleBtn.querySelector("i"); // <=== FIXED
 
 toggleBtn.addEventListener("click", () => {
   if (
@@ -82,10 +83,12 @@ toggleBtn.addEventListener("click", () => {
     chatbotContainer.style.display === ""
   ) {
     chatbotContainer.style.display = "flex";
-    toggleBtn.textContent = "❌";
+    toggleIcon.classList.remove("bxs-message-rounded-detail");
+    toggleIcon.classList.add("bxs-message-rounded-x");
   } else {
     chatbotContainer.style.display = "none";
-    toggleBtn.textContent = "💬";
+    toggleIcon.classList.remove("bxs-message-rounded-x");
+    toggleIcon.classList.add("bxs-message-rounded-detail");
   }
 });
 
@@ -164,7 +167,8 @@ async function sendMessage() {
   if (window.innerWidth <= 650) {
     setTimeout(() => {
       chatbotContainer.style.display = "none";
-      toggleBtn.textContent = "💬";
+      toggleIcon.classList.remove("bxs-message-rounded-x");
+      toggleIcon.classList.add("bxs-message-rounded-detail");
     }, 500);
   }
 }

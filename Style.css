@@ -441,9 +441,19 @@ span {
   border: 1px solid #065084;
 }
 
+.card-image-wrapper {
+  overflow: hidden;
+  height: 100%;
+}
+.card-project:hover .card-image-wrapper img {
+  transform: scale(1.2);
+  transition: transform 0.4s ease;
+}
+
 .card-project img {
   width: 100%;
-  height: 50%;
+  height: 100%; /* smooth zoom transition */
+  display: block;
 }
 
 .card-project h3 {
@@ -535,9 +545,19 @@ span {
   border: 1px solid #065084;
 }
 
+.card-image-wrapper {
+  overflow: hidden;
+  height: 100%;
+}
+.card-certificates:hover .card-image-wrapper img {
+  transform: scale(1.2);
+  transition: transform 0.4s ease;
+}
+
 .card-certificates img {
   width: 100%;
   height: 100%;
+  display: block;
 }
 
 .card-certificates h3 {
