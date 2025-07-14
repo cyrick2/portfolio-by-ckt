@@ -3,7 +3,7 @@ import OpenAI from "openai";
 // Uses your GitHub Copilot PAT stored in Netlify as GITHUB_TOKEN
 const token = process.env["GITHUB_TOKEN"];
 const endpoint = "https://models.github.ai/inference";
-const model = "gpt-4o-mini"; // updated to stable, available model
+const model = "gpt-4o-preview"; // updated to stable, available model
 
 // Full structured profile for Cyrick AI
 const CYRICK_PROFILE = `
