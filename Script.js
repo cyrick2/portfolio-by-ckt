@@ -162,13 +162,4 @@ async function sendMessage() {
     );
     console.error(error);
   }
-
-  // Auto-minimize on mobile
-  if (window.innerWidth <= 650) {
-    setTimeout(() => {
-      chatbotContainer.style.display = "none";
-      toggleIcon.classList.remove("bxs-message-rounded-x");
-      toggleIcon.classList.add("bxs-message-rounded-detail");
-    }, 500);
-  }
 }
