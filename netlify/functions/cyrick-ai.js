@@ -3,7 +3,7 @@ import OpenAI from "openai";
 // Uses your GitHub Copilot PAT stored in Netlify as GITHUB_TOKEN
 const token = process.env["GITHUB_TOKEN"];
 const endpoint = "https://models.github.ai/inference";
-const model = "openai/o4-mini";
+const model = "gpt-4o-mini"; // updated to stable, available model
 
 // Full structured profile for Cyrick AI
 const CYRICK_PROFILE = `
@@ -85,9 +85,9 @@ export async function handler(event, context) {
         {
           role: "system",
           content: `You are Cyrick AI, a friendly AI chatbot on a student portfolio website.
-You only answer questions related to Cyrick Kyle B. Tapay and his portfolio using the provided data.
+You must only answer questions related to Cyrick Kyle B. Tapay and his portfolio using the provided data.
 If a user asks something unrelated, politely respond that you can only answer portfolio-related questions.
-Provide clean, direct, human-like answers without disclaimers.
+Do not include "<think>" or internal reasoning in your response; only provide clean, direct answers.
 
 Here is the data:
 ${CYRICK_PROFILE}
@@ -96,7 +96,7 @@ ${CYRICK_PROFILE}
         { role: "user", content: userMessage },
       ],
       temperature: 0.7,
-      top_p: 0.9,
+      top_p: 1,
       max_tokens: 300,
     });
 
