@@ -83,12 +83,12 @@ toggleBtn.addEventListener("click", () => {
     chatbotContainer.style.display === ""
   ) {
     chatbotContainer.style.display = "flex";
-    toggleIcon.classList.remove("bxs-message-rounded-detail");
-    toggleIcon.classList.add("bxs-message-rounded-x");
+    toggleIcon.classList.remove("bx-message");
+    toggleIcon.classList.add("bx-message-minus");
   } else {
     chatbotContainer.style.display = "none";
-    toggleIcon.classList.remove("bxs-message-rounded-x");
-    toggleIcon.classList.add("bxs-message-rounded-detail");
+    toggleIcon.classList.remove("bx-message-minus");
+    toggleIcon.classList.add("bx-message");
   }
 });
 

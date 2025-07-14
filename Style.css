@@ -948,8 +948,14 @@ span {
 
 #chatbot-name {
   color: white;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.1rem;
+}
+
+#chatbot-text {
+  color: white;
+  font-size: 0.8rem;
+  opacity: 0.8;
 }
 
 #chatbot-container {
@@ -1002,13 +1008,22 @@ span {
 
 #chat-input-container {
   display: flex;
+  justify-content: space-between;
+}
+
+#chat-input-container input {
   border: 1px solid #333;
   background: #0e0e0e;
   border-radius: 10px;
   margin-bottom: 0.8rem;
-  margin-right: 0.8rem;
   margin-left: 0.8rem;
-  overflow: hidden;
+  width: 125%;
+}
+
+#chat-input-container button {
+  margin-right: 0.8rem;
+  height: 80%;
+  border-radius: 10px;
 }
 
 #chat-input {
@@ -1022,6 +1037,7 @@ span {
 }
 
 #send-btn {
+  margin-left: 1rem;
   background: #065084;
   color: white;
   border: none;
@@ -1031,22 +1047,29 @@ span {
 }
 
 #chat-toggle-btn {
+  justify-content: center;
+  gap: 7px;
+  align-items: center;
+  display: flex;
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
+  padding: 0.6rem 1.6rem;
+  border-radius: 17px;
   background: #065084;
   color: white;
-  font-size: 24px;
+  font-size: 1.5rem;
   border: none;
   cursor: pointer;
   z-index: 9999;
 }
+#chat-toggle-btn p {
+  font-size: 1rem;
+  font-weight: 500;
+}
 
 #chat-toggle-btn:hover {
-  transform: translateY(-10px);
+  transform: scale(1.07);
   transition: 0.3s ease;
 }
 

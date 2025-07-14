@@ -300,19 +300,26 @@
     <div id="chatbot-container">
       <div id="chatbot-header">
         <img src="Images/Profile Picture.jpg" alt="Cyrick Chatbot" id="chatbot-avatar">
-        <span id="chatbot-name">Cyrick AI</span>
+        <div>
+          <span id="chatbot-name">Chat with Cyrick</span>
+          <p id="chatbot-text">Chatbot - Cyrick AI</p>
+        </div>
+        
       </div>
        <div id="chat-window"></div>
          <div id="chat-input-container">
-          <input type="text" id="chat-input" placeholder="Type your message..." />
-          <button id="send-btn"><i class='bx bxs-send'></i></button>
+          <div><input type="text" id="chat-input" placeholder="Type your message..." /></div>
+          <div><button id="send-btn"><i class='bx bxs-send'></i></button></div>
+          </div>
       </div>
+
     </div>
 
 
     <!-- Chat Toggle Button -->
     <button button id="chat-toggle-btn">
-       <i class='bx bxs-message-rounded-detail'></i>
+        <i class='bx bx-message'></i>
+        <p>Chat with Cyrick</p>
     </button>
 
 
