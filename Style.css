@@ -934,30 +934,28 @@ span {
 #chatbot-header {
   display: flex;
   align-items: center;
-  background: #060606;
-  border-bottom: 1px solid #065084;
-  padding: 8px 10px;
+  background: #065084;
+  padding: 8px 14px;
 }
 
 #chatbot-avatar {
-  width: 35px;
-  height: 35px;
+  width: 33px;
+  height: 33px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
 }
 
 #chatbot-name {
-  color: #065084;
-  font-weight: 700;
-  font-size: 1rem;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
 #chatbot-container {
   width: 300px;
   height: 400px;
   background: #0e0e0e;
-  border: 2px solid #065084;
   border-radius: 10px;
   position: fixed;
   bottom: 80px;
@@ -1004,8 +1002,13 @@ span {
 
 #chat-input-container {
   display: flex;
-  border-top: 1px solid #333;
+  border: 1px solid #333;
   background: #0e0e0e;
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+  margin-right: 0.8rem;
+  margin-left: 0.8rem;
+  overflow: hidden;
 }
 
 #chat-input {
@@ -1024,7 +1027,7 @@ span {
   border: none;
   padding: 0 15px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
 }
 
 #chat-toggle-btn {
@@ -1040,6 +1043,11 @@ span {
   border: none;
   cursor: pointer;
   z-index: 9999;
+}
+
+#chat-toggle-btn:hover {
+  transform: translateY(-10px);
+  transition: 0.3s ease;
 }
 
 /* ===== Medium devices: Phones (landscape) & small tablets ===== */
