@@ -931,6 +931,30 @@ span {
   }
 }
 
+/* Dark mode scrollbar for chatbot */
+#chat-window::-webkit-scrollbar {
+  width: 8px;
+}
+
+#chat-window::-webkit-scrollbar-track {
+  background: #0e0e0e;
+}
+
+#chat-window::-webkit-scrollbar-thumb {
+  background: #065084;
+  border-radius: 10px;
+}
+
+#chat-window::-webkit-scrollbar-thumb:hover {
+  background: #0a7cc1;
+}
+
+/* For Firefox */
+#chat-window {
+  scrollbar-width: thin;
+  scrollbar-color: #065084 #0e0e0e;
+}
+
 #chatbot-header {
   display: flex;
   align-items: center;
