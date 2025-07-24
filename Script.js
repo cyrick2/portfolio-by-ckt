@@ -28,7 +28,7 @@ function erase() {
   }
 }
 
-// ===== Flip Card Animation =====
+// ===== Flip Card Animation
 document.addEventListener("DOMContentLoaded", () => {
   setTimeout(type, typingSpeed);
 
